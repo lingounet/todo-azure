@@ -21,6 +21,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
       - name: Terraform plan
-        run: terraform plan
+        run: terraform plan -var location="westeurope" -var resource_group="stgo-dsi-dp-test-rg" -var storage_name="stgodsidptestsa" -var service_plan_name="stgo-dsi-dp-test-asp" -var service_name="stgo-dsi-dp-test-service" -var mysql_server_name="stgo-dsi-dp-test-mysql" -var mysql_database_name="todo" -var mysql_firewall_name="stgo-dsi-dp-test-firewall"
       - name: Terraform apply
-        run: terraform apply --auto-approve
+        run: terraform apply --auto-approve -var location="westeurope" -var resource_group="stgo-dsi-dp-test-rg" -var storage_name="stgodsidptestsa" -var service_plan_name="stgo-dsi-dp-test-asp" -var service_name="stgo-dsi-dp-test-service" -var mysql_server_name="stgo-dsi-dp-test-mysql" -var mysql_database_name="todo" -var mysql_firewall_name="stgo-dsi-dp-test-firewall"
