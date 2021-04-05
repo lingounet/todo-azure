@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Deploy Azure infrastructure
 
 on:
   push:
@@ -15,12 +13,16 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+      TERRAFORM_RG: stgo-dsi-dp-tf-rg
+      TERRAFORM_SA: stgodsidpterraform
+      TERRAFORM_ENV: test
+      TERRAFORM_KEY: tf/${{ github.event.repository.name }}/terraform.tfstate
     steps:
       - uses: actions/checkout@v2
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config=storage_account_name=$TERRAFORM_SA -backend-config=container_name=$TERRAFORM_ENV -backend-config=key=$TERRAFORM_KEY -backend-config=resource_group_name=$TERRAFORM_RG
       - name: Terraform plan
         run: terraform plan -var location="westeurope" -var resource_group="stgo-dsi-dp-test-rg" -var storage_name="stgodsidptestsa" -var service_plan_name="stgo-dsi-dp-test-asp" -var service_name="stgo-dsi-dp-test-service" -var mysql_server_name="stgo-dsi-dp-test-mysql" -var mysql_database_name="todo" -var mysql_firewall_name="stgo-dsi-dp-test-firewall"
       - name: Terraform apply
